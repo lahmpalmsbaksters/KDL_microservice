@@ -13,6 +13,7 @@ client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client[MONGO_DB]
 
 users_collection = database.get_collection("users_collection")
+logs_collection = database.get_collection("logs_collection")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -28,6 +29,7 @@ def user_helper(user) -> dict:
 def get_password_hash(password):
     return pwd_context.hash(password)
 
+
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
@@ -38,6 +40,7 @@ async def add_userdata(apikey_data: dict) -> dict:
     user_data = await users_collection.insert_one(payload)
     new_userdata = await users_collection.find_one({"_id": user_data.inserted_id})
     return user_helper(new_userdata)
+
 
 async def check_userdata(user_data: dict) -> dict:
     result = await users_collection.find_one({"email": user_data.email})
@@ -53,10 +56,17 @@ async def check_userdata(user_data: dict) -> dict:
             return result_data
     else:
         return False
-    
+
+
 async def check_apikey(id: str) -> dict:
     result = await users_collection.find_one({"apikey": id})
     if result:
         return True
     else:
         return False
+
+
+async def create_log(log_data: dict) -> dict:
+    log = await logs_collection.insert_one(log_data)
+    new_log = await logs_collection.find_one({"_id": log.inserted_id})
+    return (new_log)

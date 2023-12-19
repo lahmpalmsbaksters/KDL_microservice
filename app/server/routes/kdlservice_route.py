@@ -1,6 +1,7 @@
 from server.security.auth_bearer import JWTBearer
 from server.models.response_model import (ResponseModel, ErrorResponseModel)
 from server.security.auth import (check_apikey_isvalid)
+from server.database import (create_log)
 from fastapi import APIRouter, Header, HTTPException, Request, Depends
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime
@@ -35,7 +36,7 @@ async def health_check(request: Request, apikey: str = Header(None)):
                         "response": response.json()
                     }
                     log_request_body = jsonable_encoder(log_request)
-                    # await add_log(log_request_body)
+                    await create_log(log_request_body)
                     return ResponseModel(response.json(), "Request to KDL service API successful")
                 else:
                     log_request = {
@@ -48,7 +49,7 @@ async def health_check(request: Request, apikey: str = Header(None)):
                         "response": str('Request to KDL service API failed')
                     }
                     log_request_body = jsonable_encoder(log_request)
-                    # await add_log(log_request_body)
+                    await create_log(log_request_body)
                     raise HTTPException(
                         status_code=response.status_code, detail="Request to KDL service API failed")
         except Exception:
@@ -62,5 +63,5 @@ async def health_check(request: Request, apikey: str = Header(None)):
                 "response": str('Internal Server Error')
             }
             log_request_body = jsonable_encoder(log_request)
-            # await add_log(log_request_body)
+            await create_log(log_request_body)
             return ErrorResponseModel('error', 500, 'Internal Server Error')
