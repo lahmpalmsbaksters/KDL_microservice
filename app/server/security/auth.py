@@ -2,6 +2,7 @@ import time
 from typing import Dict
 import jwt
 from decouple import config
+from server.database import (check_apikey)
 
 
 JWT_SECRET = config("secret")
@@ -47,9 +48,9 @@ def decodeJWT(token: str) -> dict:
         return {}
 
 
-# async def check_api_data(user_apikey):
-#     result = await find_api(user_apikey)
-#     if result:
-#         return True  # API key is valid
-#     else:
-#         return False  # API key is not found in the database
+async def check_apikey_isvalid(user_apikey):
+    result = await check_apikey(user_apikey)
+    if result:
+        return True  # API key is valid
+    else:
+        return False  # API key is not found in the database
