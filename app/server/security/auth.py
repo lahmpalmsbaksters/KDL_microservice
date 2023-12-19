@@ -2,7 +2,7 @@ import time
 from typing import Dict
 import jwt
 from decouple import config
-from server.database import (check_apikey)
+from app.server.database import (check_apikey)
 
 
 JWT_SECRET = config("secret")

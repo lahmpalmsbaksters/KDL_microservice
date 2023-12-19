@@ -1,7 +1,7 @@
-from server.security.auth_bearer import JWTBearer
-from server.models.response_model import (ResponseModel, ErrorResponseModel)
-from server.security.auth import (check_apikey_isvalid)
-from server.database import (create_log)
+from app.server.security.auth_bearer import JWTBearer
+from app.server.models.response_model import (ResponseModel, ErrorResponseModel)
+from app.server.security.auth import (check_apikey_isvalid)
+from app.server.database import (create_log)
 from fastapi import APIRouter, Header, HTTPException, Request, Depends
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime

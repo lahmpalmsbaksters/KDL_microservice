@@ -1,8 +1,8 @@
-from server.security.auth import (signJWT, signupJWT)
-from server.database import (add_userdata, check_userdata)
-from server.security.auth_bearer import JWTBearer
+from app.server.security.auth import (signJWT, signupJWT)
+from app.server.database import (add_userdata, check_userdata)
+from app.server.security.auth_bearer import JWTBearer
 from fastapi import APIRouter, Body, Header, Request, Depends
-from server.models.user_model import (UserSchema, UserLoginSchema)
+from app.server.models.user_model import (UserSchema, UserLoginSchema)
 from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
